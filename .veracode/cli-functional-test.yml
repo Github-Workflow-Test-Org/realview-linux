@@ -1,0 +1,27 @@
+name: Realview linux c++
+testcases:
+- name: Realview Linux Packaging
+  steps:
+  - script: |
+      cd ../
+      CMAKE_CXX_COMPILER=/usr/local/bin/g++ SRCCLR_MAKE_TARGETS=build veracode package --source . --type directory --output .veracode/output/auto --trust
+    assertions:
+      - result.code ShouldEqual 0
+      - result.timeseconds ShouldBeLessThan 50
+      - result.systemout ShouldContainSubstring "Packaging code for project realview. Please wait; this may take a while..."
+      - result.systemout ShouldContainSubstring "Verifying source project language ..."
+      - result.systemout ShouldContainSubstring "Packaging preprocessed C/C++ artifacts for PreprocessedCppPackager publish path"
+      - result.systemout ShouldContainSubstring "C/C++ preprocessing successfully completed."
+      - result.systemout ShouldContainSubstring "C/C++ project realview packaged to:"
+      - result.systemout ShouldContainSubstring "packager-functional-test-scripts/cpp/realview/.veracode/output/auto/veracode-auto-pack-realview-preprocessed_c_cpp.zip"
+      - result.systemout ShouldContainSubstring "Successfully created 1 artifact(s)."
+
+  - type: check-zip-count
+    zip-file: "veracode-auto-pack-realview-preprocessed_c_cpp.zip"
+    assertions:
+      - result.zip-file.count ShouldEqual 8
+
+  - type: check-zip-contents
+    zip-file: "veracode-auto-pack-realview-preprocessed_c_cpp.zip"
+    assertions:
+      - result.zip-file.difference ShouldBeEmpty
