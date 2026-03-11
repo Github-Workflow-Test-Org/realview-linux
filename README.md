@@ -1,7 +1,7 @@
 # Process Monitor
  A simple app that monitors running processes on a linux server
 
-## Installation
+## Installationy
  
 You are welcome to develop this project on your local machine.
 
